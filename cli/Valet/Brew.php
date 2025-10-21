@@ -179,7 +179,7 @@ class Brew
         $formulas = is_array($formulas) ? $formulas : func_get_args();
 
         foreach ($formulas as $formula) {
-            $this->cli->passthru(static::BREW_DISABLE_AUTO_CLEANUP.' sudo -u "'.user().'" brew tap '.$formula);
+            $this->cli->passthru(static::BREW_DISABLE_AUTO_CLEANUP.' brew tap '.$formula);
         }
     }
 
@@ -197,9 +197,9 @@ class Brew
                 // first we ensure that the service is not incorrectly running as non-root
                 $this->cli->quietly('brew services stop '.$service);
                 // stop the actual/correct sudo version
-                $this->cli->quietly('sudo brew services stop '.$service);
+                $this->cli->quietly('brew services stop '.$service);
                 // start correctly as root
-                $this->cli->quietly('sudo brew services start '.$service);
+                $this->cli->quietly('brew services start '.$service);
             }
         }
     }
@@ -219,7 +219,7 @@ class Brew
                 $this->cli->quietly('brew services stop '.$service);
 
                 // stop the sudo version
-                $this->cli->quietly('sudo brew services stop '.$service);
+                $this->cli->quietly('brew services stop '.$service);
 
                 // restore folder permissions: for each brew formula, these directories are owned by root:admin
                 $directories = [
@@ -424,7 +424,7 @@ class Brew
 
         return collect(array_filter(explode(PHP_EOL, $asUser
             ? $this->cli->runAsUser($command, $onError)
-            : $this->cli->run('sudo '.$command, $onError)
+            : $this->cli->run($command, $onError)
         )));
     }
 

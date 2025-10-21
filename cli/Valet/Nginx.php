@@ -87,7 +87,7 @@ class Nginx
     private function lint(): void
     {
         $this->cli->run(
-            'sudo nginx -c '.static::NGINX_CONF.' -t',
+            'nginx -c '.static::NGINX_CONF.' -t',
             function ($exitCode, $outputMessage) {
                 throw new DomainException("Nginx cannot start; please check your nginx.conf [$exitCode: $outputMessage].");
             }

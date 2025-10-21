@@ -19,7 +19,7 @@ class CommandLine
      */
     public function quietlyAsUser(string $command): void
     {
-        $this->quietly('sudo -u "'.user().'" '.$command.' > /dev/null 2>&1');
+        $this->quietly($command.' > /dev/null 2>&1');
     }
 
     /**
@@ -43,7 +43,7 @@ class CommandLine
      */
     public function runAsUser(string $command, ?callable $onError = null): string
     {
-        return $this->runCommand('sudo -u "'.user().'" '.$command, $onError);
+        return $this->runCommand($command, $onError);
     }
 
     /**
