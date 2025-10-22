@@ -117,7 +117,7 @@ You may remove your user-specific Valet config files by running:  <comment>rm -r
 You can run <comment>composer global remove laravel/valet</comment> to uninstall the Valet package.
 
 <info>4. Homebrew Services</info>
-You may remove the core services (php, nginx, dnsmasq) by running: <comment>brew uninstall --force php nginx dnsmasq</comment>
+You may remove the core services (php, nginx) by running: <comment>brew uninstall --force php nginx</comment>
 You can then remove selected leftover configurations for these services manually in both <comment>'.BREW_PREFIX.'/etc/</comment> and <comment>'.BREW_PREFIX.'/logs/</comment>.
 (If you have other PHP versions installed, run <info>brew list --formula | grep php</info> to see which versions you should also uninstall manually.)
 

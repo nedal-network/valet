@@ -80,27 +80,6 @@ class Status
                 'debug' => 'Visit https://brew.sh/ for instructions on installing Homebrew.',
             ],
             [
-                'description' => 'Is DnsMasq installed?',
-                'check' => function () {
-                    return $this->brew->installed('dnsmasq');
-                },
-                'debug' => 'Run `valet install`.',
-            ],
-            [
-                'description' => 'Is Dnsmasq running?',
-                'check' => function () {
-                    return $this->isBrewServiceRunning('dnsmasq');
-                },
-                'debug' => 'Run `valet restart`.',
-            ],
-            [
-                'description' => 'Is Dnsmasq running as root?',
-                'check' => function () {
-                    return $this->isBrewServiceRunningAsRoot('dnsmasq');
-                },
-                'debug' => 'Uninstall Dnsmasq with Brew and run `valet install`.',
-            ],
-            [
                 'description' => 'Is Nginx installed?',
                 'check' => function () {
                     return $this->brew->installed('nginx') || $this->brew->installed('nginx-full');

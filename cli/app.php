@@ -65,8 +65,6 @@ $app->command('install', function (OutputInterface $output) {
     output();
     PhpFpm::install();
     output();
-    DnsMasq::install(Configuration::read()['tld']);
-    output();
     Site::renew();
     Nginx::restart();
     output();
@@ -128,11 +126,6 @@ if (is_dir(VALET_HOME_PATH)) {
             return warning('No new Valet tld was set.');
         }
 
-        DnsMasq::updateTld(
-            $oldTld = Configuration::read()['tld'],
-            $tld = trim($tld, '.')
-        );
-
         Configuration::updateKey('tld', $tld);
 
         Site::resecureForNewConfiguration(['tld' => $oldTld], ['tld' => $tld]);
@@ -158,7 +151,6 @@ if (is_dir(VALET_HOME_PATH)) {
 
         Configuration::updateKey('loopback', $loopback);
 
-        DnsMasq::refreshConfiguration();
         Site::aliasLoopback($oldLoopback, $loopback);
         Site::resecureForNewConfiguration(['loopback' => $oldLoopback], ['loopback' => $loopback]);
         PhpFpm::restart();
@@ -453,15 +445,10 @@ if (is_dir(VALET_HOME_PATH)) {
     $app->command('start [service]', function (OutputInterface $output, $service) {
         switch ($service) {
             case '':
-                DnsMasq::restart();
                 PhpFpm::restart();
                 Nginx::restart();
 
                 return info('Valet services have been started.');
-            case 'dnsmasq':
-                DnsMasq::restart();
-
-                return info('dnsmasq has been started.');
             case 'nginx':
                 Nginx::restart();
 
@@ -481,15 +468,10 @@ if (is_dir(VALET_HOME_PATH)) {
     $app->command('restart [service]', function (OutputInterface $output, $service) {
         switch ($service) {
             case '':
-                DnsMasq::restart();
                 PhpFpm::restart();
                 Nginx::restart();
 
                 return info('Valet services have been restarted.');
-            case 'dnsmasq':
-                DnsMasq::restart();
-
-                return info('dnsmasq has been restarted.');
             case 'nginx':
                 Nginx::restart();
 
@@ -519,11 +501,10 @@ if (is_dir(VALET_HOME_PATH)) {
                 PhpFpm::stopRunning();
                 Nginx::stop();
 
-                return info('Valet core services have been stopped. To also stop dnsmasq, run: valet stop dnsmasq');
+                return info('Valet core services have been stopped.');
             case 'all':
                 PhpFpm::stopRunning();
                 Nginx::stop();
-                Dnsmasq::stop();
 
                 return info('All Valet services have been stopped.');
             case 'nginx':
@@ -534,10 +515,6 @@ if (is_dir(VALET_HOME_PATH)) {
                 PhpFpm::stopRunning();
 
                 return info('PHP has been stopped.');
-            case 'dnsmasq':
-                Dnsmasq::stop();
-
-                return info('dnsmasq has been stopped.');
         }
 
         return warning(sprintf('Invalid valet service name [%s]', $service));
@@ -548,7 +525,7 @@ if (is_dir(VALET_HOME_PATH)) {
      */
     $app->command('uninstall [--force]', function (InputInterface $input, OutputInterface $output, $force) {
         if ($force) {
-            warning('YOU ARE ABOUT TO UNINSTALL Nginx, PHP, Dnsmasq and all Valet configs and logs.');
+            warning('YOU ARE ABOUT TO UNINSTALL Nginx, PHP and all Valet configs and logs.');
             $helper = $this->getHelperSet()->get('question');
             $question = new ConfirmationQuestion('Are you sure you want to proceed? [y/N]', false);
 
@@ -562,8 +539,6 @@ if (is_dir(VALET_HOME_PATH)) {
             Site::removeCa();
             info('Removing Nginx and configs...');
             Nginx::uninstall();
-            info('Removing Dnsmasq and configs...');
-            DnsMasq::uninstall();
             info('Removing loopback customization...');
             Site::uninstallLoopback();
             info('Removing Valet configs and customizations...');
