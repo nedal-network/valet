@@ -7,6 +7,11 @@
 <a href="https://packagist.org/packages/laravel/valet"><img src="https://poser.pugx.org/laravel/valet/license.svg" alt="License"></a>
 </p>
 
+## Futtatáshoz kellhet
+```bash
+sudo setcap 'cap_net_bind_service=+ep' /home/linuxbrew/.linuxbrew/opt/nginx/bin/nginx
+```
+
 ## Introduction
 
 Valet is a Laravel development environment for Mac minimalists. No Vagrant, no `/etc/hosts` file. You can even share your sites publicly using local tunnels. _Yeah, we like it too._
