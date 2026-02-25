@@ -231,7 +231,7 @@ class Brew
                 $whoami = get_current_user();
 
                 foreach ($directories as $directory) {
-                    $this->cli->quietly("sudo chown -R {$whoami}:admin '$directory'");
+                    $this->cli->quietly("chown -R {$whoami}:admin '$directory'");
                 }
             }
         }
